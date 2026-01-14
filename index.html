@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VortexAI - Seu Gerador de Código Inteligente</title>
+    <style>
+        :root {
+            --bg: #0d1117;
+            --vortex-neon: #8b5cf6;
+            --text: #c9d1d9;
+            --card: #161b22;
+            --code-bg: #010409;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: var(--vortex-neon);
+            margin-bottom: 30px;
+            text-align: center;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+        }
+
+        .chat-container {
+            width: 90%;
+            max-width: 800px;
+            background: var(--card);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+            margin-bottom: 30px;
+            border: 1px solid var(--vortex-neon);
+        }
+
+        textarea {
+            width: calc(100% - 22px);
+            min-height: 80px;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid var(--vortex-neon);
+            background: var(--code-bg);
+            color: white;
+            resize: vertical;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+        }
+
+        button {
+            padding: 12px 25px;
+            background: var(--vortex-neon);
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 16px;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background: #a78bfa;
+            transform: translateY(-2px);
+        }
+
+        #output-area {
+            background: var(--code-bg);
+            border: 1px solid #333;
+            border-radius: 5px;
+            padding: 15px;
+            min-height: 150px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+
+        .render-area {
+            width: 90%;
+            max-width: 800px;
+            margin-top: 30px;
+            background: var(--card);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--vortex-neon);
+        }
+
+        .render-area h2 {
+            color: var(--vortex-neon);
+            margin-bottom: 15px;
+            text-align: center;
+            text-shadow: 0 0 5px rgba(139, 92, 246, 0.3);
+        }
+
+        #code-preview-iframe {
+            width: 100%;
+            height: 300px;
+            border: 1px solid var(--vortex-neon);
+            background-color: white; /* Fundo branco para visualização */
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>VortexAI - Seu Coder Pessoal</h1>
+
+    <div class="chat-container">
+        <textarea id="prompt-input" placeholder="O que você quer que o VortexAI crie? (Ex: 'Crie um botão azul em HTML com texto Clicar', 'Faça um formulário de login com CSS básico')"></textarea>
+        <button onclick="gerarCodigo()">Gerar Código</button>
+        <div id="output-area"></div>
+    </div>
+
+    <div class="render-area">
+        <h2>Visualização do Código</h2>
+        <iframe id="code-preview-iframe" title="Prévia do Código Gerado"></iframe>
+    </div>
+
+    <script type="module">
+        // Importa a biblioteca para fazer requisições à API
+        // Você precisará de um pequeno "proxy" ou um serviço serverless para chamar a API da IA
+        // diretamente, pois as chaves da API não devem ser expostas no frontend.
+        // Por enquanto, vamos simular a resposta da IA.
+
+        // IMPORTANTE:
+        // VOCÊ PRECISA CONFIGURAR UM BACKEND (SERVERLESS - Ex: Cloud Functions, Vercel Edge Functions, ou Supabase Edge Functions)
+        // PARA CHAMAR A API REAL DA IA (Google Gemini, OpenAI GPT, etc.)
+        // E NÃO EXPOR SUA API_KEY DIRETAMENTE NO FRONTEND!
+        // A 'URL_DO_SEU_PROXY_DA_IA' ABAIXO É APENAS UM EXEMPLO.
+
+        const API_PROXY_URL = 'https://sua-url-do-proxy-da-ia.netlify.app/.netlify/functions/gemini-proxy'; // Exemplo de URL de um proxy Netlify Function
+        // OU Crie sua própria função em um serviço como Vercel, Firebase Functions, etc.
+
+        async function gerarCodigo() {
+            const prompt = document.getElementById('prompt-input').value;
+            const outputArea = document.getElementById('output-area');
+            const iframe = document.getElementById('code-preview-iframe');
+
+            if (!prompt) {
+                outputArea.innerHTML = "Por favor, digite o que você quer que a VortexAI crie.";
+                return;
+            }
+
+            outputArea.innerHTML = 'A VortexAI está pensando no seu código...';
+            iframe.srcdoc = ''; // Limpa o iframe
+
+            try {
+                // Simulação de chamada à API da IA
+                // Em um ambiente real, esta chamada iria para seu proxy, que chamaria a API da IA
+                const response = await fetch(API_PROXY_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ userPrompt: prompt }),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const codigoGerado = data.generatedCode || ""; // Supondo que a resposta tenha uma chave 'generatedCode'
+
+                outputArea.textContent = codigoGerado; // Exibe o código
+                
+                // Renderiza o código no iframe para visualização
+                iframe.srcdoc = codigoGerado;
+
+            } catch (error) {
+                console.error("Erro ao gerar código com a VortexAI:", error);
+                outputArea.textContent = `Erro ao conectar com a VortexAI. Verifique a URL do proxy e sua conexão. Detalhes: ${error.message}`;
+                iframe.srcdoc = `<p style="color: red; padding: 10px;">Erro ao carregar prévia.</p>`;
+            }
+        }
+
+        // Expondo a função para o HTML (se for usado no onclick)
+        window.gerarCodigo = gerarCodigo;
+    </script>
+
+</body>
+</html>
