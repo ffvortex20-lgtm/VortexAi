@@ -3,196 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VortexAI - Seu Gerador de Código Inteligente</title>
+    <title>VortexAI | Multifuncional</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+
     <style>
         :root {
-            --bg: #0d1117;
-            --vortex-neon: #8b5cf6;
-            --text: #c9d1d9;
-            --card: #161b22;
-            --code-bg: #010409;
+            --bg: #05070a;
+            --vortex-neon: #00f2ff;
+            --vortex-purple: #8b5cf6;
+            --text: #e6edf3;
+            --card: #0d1117;
+            --border: #30363d;
         }
 
         body {
             background-color: var(--bg);
             color: var(--text);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
             margin: 0;
-            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
         }
 
-        h1 {
-            color: var(--vortex-neon);
-            margin-bottom: 30px;
-            text-align: center;
-            letter-spacing: 2px;
-            text-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
-        }
-
-        .chat-container {
-            width: 90%;
-            max-width: 800px;
-            background: var(--card);
-            border-radius: 10px;
-            padding: 25px;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
-            margin-bottom: 30px;
-            border: 1px solid var(--vortex-neon);
-        }
-
-        textarea {
-            width: calc(100% - 22px);
-            min-height: 80px;
-            padding: 10px;
-            margin-bottom: 15px;
-            border-radius: 5px;
-            border: 1px solid var(--vortex-neon);
-            background: var(--code-bg);
-            color: white;
-            resize: vertical;
-            font-family: 'Consolas', 'Monaco', monospace;
-            font-size: 14px;
-        }
-
-        button {
-            padding: 12px 25px;
-            background: var(--vortex-neon);
-            border: none;
-            color: white;
-            cursor: pointer;
-            border-radius: 5px;
-            font-weight: bold;
-            font-size: 16px;
-            transition: background 0.3s ease, transform 0.2s ease;
-        }
-
-        button:hover {
-            background: #a78bfa;
-            transform: translateY(-2px);
-        }
-
-        #output-area {
-            background: var(--code-bg);
-            border: 1px solid #333;
-            border-radius: 5px;
-            padding: 15px;
-            min-height: 150px;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            font-family: 'Consolas', 'Monaco', monospace;
-            font-size: 14px;
-            line-height: 1.5;
-            overflow-x: auto;
-            margin-top: 20px;
-        }
-
-        .render-area {
-            width: 90%;
-            max-width: 800px;
-            margin-top: 30px;
-            background: var(--card);
-            border-radius: 10px;
-            padding: 25px;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
-            border: 1px solid var(--vortex-neon);
-        }
-
-        .render-area h2 {
-            color: var(--vortex-neon);
-            margin-bottom: 15px;
-            text-align: center;
-            text-shadow: 0 0 5px rgba(139, 92, 246, 0.3);
-        }
-
-        #code-preview-iframe {
+        header {
             width: 100%;
-            height: 300px;
-            border: 1px solid var(--vortex-neon);
-            background-color: white; /* Fundo branco para visualização */
-            border-radius: 5px;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid var(--vortex-neon);
+            background: rgba(13, 17, 23, 0.9);
         }
+
+        h1 { color: var(--vortex-neon); text-shadow: 0 0 10px var(--vortex-neon); margin: 0; }
+
+        .container { width: 95%; max-width: 900px; margin: 20px auto; }
+
+        #chat-box {
+            height: 400px;
+            overflow-y: auto;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .msg { padding: 12px; border-radius: 10px; max-width: 80%; line-height: 1.4; }
+        .user-msg { background: var(--vortex-purple); align-self: flex-end; color: white; }
+        .ai-msg { background: #21262d; border-left: 4px solid var(--vortex-neon); align-self: flex-start; }
+
+        .input-area { display: flex; gap: 10px; background: var(--card); padding: 15px; border-radius: 10px; border: 1px solid var(--border); }
+        textarea { flex: 1; background: transparent; border: none; color: white; outline: none; resize: none; height: 50px; }
+        
+        .btn { background: var(--vortex-neon); color: black; border: none; padding: 10px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        .btn-red { background: #ff4444; color: white; margin-left: 10px; }
+
+        .preview-section { margin-top: 20px; width: 100%; display: none; }
+        iframe { width: 100%; height: 400px; background: white; border-radius: 10px; border: 2px solid var(--vortex-neon); }
     </style>
 </head>
 <body>
 
-    <h1>VortexAI - Seu Coder Pessoal</h1>
+<header>
+    <h1>VORTEX AI</h1>
+    <div id="user-info" style="margin-top:10px;">Carregando...</div>
+    <button id="login-btn" class="btn" style="display:none">Entrar com Google</button>
+    <button id="logout-btn" class="btn btn-red" style="display:none">Sair</button>
+</header>
 
-    <div class="chat-container">
-        <textarea id="prompt-input" placeholder="O que você quer que o VortexAI crie? (Ex: 'Crie um botão azul em HTML com texto Clicar', 'Faça um formulário de login com CSS básico')"></textarea>
-        <button onclick="gerarCodigo()">Gerar Código</button>
-        <div id="output-area"></div>
+<div class="container" id="app-content" style="display:none">
+    <div id="chat-box">
+        <div class="msg ai-msg">Olá! Eu sou a VortexAI. Como posso ajudar com códigos, imagens ou vídeos hoje?</div>
     </div>
 
-    <div class="render-area">
-        <h2>Visualização do Código</h2>
-        <iframe id="code-preview-iframe" title="Prévia do Código Gerado"></iframe>
+    <div class="input-area">
+        <textarea id="user-input" placeholder="Peça para criar um código ou interface..."></textarea>
+        <button class="btn" onclick="enviarVortex()">ENVIAR</button>
+        <button class="btn btn-red" onclick="limparChat()">LIMPAR</button>
     </div>
 
-    <script type="module">
-        // Importa a biblioteca para fazer requisições à API
-        // Você precisará de um pequeno "proxy" ou um serviço serverless para chamar a API da IA
-        // diretamente, pois as chaves da API não devem ser expostas no frontend.
-        // Por enquanto, vamos simular a resposta da IA.
+    <div class="preview-section" id="preview-section">
+        <h3 style="color: var(--vortex-neon)">🚀 Resultado da Interface:</h3>
+        <iframe id="preview-frame"></iframe>
+    </div>
+</div>
 
-        // IMPORTANTE:
-        // VOCÊ PRECISA CONFIGURAR UM BACKEND (SERVERLESS - Ex: Cloud Functions, Vercel Edge Functions, ou Supabase Edge Functions)
-        // PARA CHAMAR A API REAL DA IA (Google Gemini, OpenAI GPT, etc.)
-        // E NÃO EXPOR SUA API_KEY DIRETAMENTE NO FRONTEND!
-        // A 'URL_DO_SEU_PROXY_DA_IA' ABAIXO É APENAS UM EXEMPLO.
+<script>
+    // Configurações do seu Firebase (Já estão certas conforme você passou)
+    const firebaseConfig = {
+        apiKey: "AIzaSyAx-jIvw9lqykjroKMWzRTEOlZ41Xk6-bY",
+        authDomain: "vortexxxxxxxxx-5159f.firebaseapp.com",
+        projectId: "vortexxxxxxxxx-5159f",
+        storageBucket: "vortexxxxxxxxx-5159f.firebasestorage.app",
+        messagingSenderId: "921732735688",
+        appId: "1:921732735688:android:b88cdd6933a954825d3bfd"
+    };
 
-        const API_PROXY_URL = 'https://sua-url-do-proxy-da-ia.netlify.app/.netlify/functions/gemini-proxy'; // Exemplo de URL de um proxy Netlify Function
-        // OU Crie sua própria função em um serviço como Vercel, Firebase Functions, etc.
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const provider = new firebase.auth.GoogleAuthProvider();
 
-        async function gerarCodigo() {
-            const prompt = document.getElementById('prompt-input').value;
-            const outputArea = document.getElementById('output-area');
-            const iframe = document.getElementById('code-preview-iframe');
-
-            if (!prompt) {
-                outputArea.innerHTML = "Por favor, digite o que você quer que a VortexAI crie.";
-                return;
-            }
-
-            outputArea.innerHTML = 'A VortexAI está pensando no seu código...';
-            iframe.srcdoc = ''; // Limpa o iframe
-
-            try {
-                // Simulação de chamada à API da IA
-                // Em um ambiente real, esta chamada iria para seu proxy, que chamaria a API da IA
-                const response = await fetch(API_PROXY_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ userPrompt: prompt }),
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Erro HTTP: ${response.status}`);
-                }
-
-                const data = await response.json();
-                const codigoGerado = data.generatedCode || ""; // Supondo que a resposta tenha uma chave 'generatedCode'
-
-                outputArea.textContent = codigoGerado; // Exibe o código
-                
-                // Renderiza o código no iframe para visualização
-                iframe.srcdoc = codigoGerado;
-
-            } catch (error) {
-                console.error("Erro ao gerar código com a VortexAI:", error);
-                outputArea.textContent = `Erro ao conectar com a VortexAI. Verifique a URL do proxy e sua conexão. Detalhes: ${error.message}`;
-                iframe.srcdoc = `<p style="color: red; padding: 10px;">Erro ao carregar prévia.</p>`;
-            }
+    // Controle de Login
+    auth.onAuthStateChanged(user => {
+        const userInfo = document.getElementById('user-info');
+        if (user) {
+            userInfo.innerText = `Olá, ${user.displayName}!`;
+            document.getElementById('app-content').style.display = 'block';
+            document.getElementById('login-btn').style.display = 'none';
+            document.getElementById('logout-btn').style.display = 'inline-block';
+        } else {
+            userInfo.innerText = `Acesse para usar a IA.`;
+            document.getElementById('app-content').style.display = 'none';
+            document.getElementById('login-btn').style.display = 'inline-block';
+            document.getElementById('logout-btn').style.display = 'none';
         }
+    });
 
-        // Expondo a função para o HTML (se for usado no onclick)
-        window.gerarCodigo = gerarCodigo;
-    </script>
+    document.getElementById('login-btn').onclick = () => auth.signInWithPopup(provider);
+    document.getElementById('logout-btn').onclick = () => auth.signOut();
+
+    // Lógica do Chat
+    function enviarVortex() {
+        const input = document.getElementById('user-input').value;
+        if (!input) return;
+
+        addMsg('user', input);
+        document.getElementById('user-input').value = '';
+
+        // Simulação de resposta (Já que você não tem a API KEY ainda)
+        setTimeout(() => {
+            const resposta = "Entendi! Como sou uma versão de demonstração, aqui está um exemplo de como eu projeto interfaces para você:";
+            addMsg('ai', resposta);
+            
+            // Exemplo de código que a IA "geraria"
+            const code = `<html><body style="background:#111; color:cyan; display:flex; justify-content:center; align-items:center; height:100vh; font-family:sans-serif;">
+                <div style="border:2px solid cyan; padding:20px; border-radius:10px; text-align:center; box-shadow: 0 0 15px cyan;">
+                    <h1>Vortex Interface</h1>
+                    <button style="padding:10px 20px; background:cyan; border:none; border-radius:5px; cursor:pointer;">Botão Neon</button>
+                </div>
+            </body></html>`;
+            
+            mostrarInterface(code);
+        }, 1000);
+    }
+
+    function addMsg(tipo, texto) {
+        const box = document.getElementById('chat-box');
+        const div = document.createElement('div');
+        div.className = `msg ${tipo}-msg`;
+        div.innerText = texto;
+        box.appendChild(div);
+        box.scrollTop = box.scrollHeight;
+    }
+
+    function mostrarInterface(html) {
+        document.getElementById('preview-section').style.display = 'block';
+        document.getElementById('preview-frame').srcdoc = html;
+    }
+
+    function limparChat() {
+        document.getElementById('chat-box').innerHTML = '<div class="msg ai-msg">Chat limpo. Como posso ajudar agora?</div>';
+        document.getElementById('preview-section').style.display = 'none';
+    }
+</script>
 
 </body>
 </html>
