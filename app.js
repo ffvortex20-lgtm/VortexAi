@@ -1,32 +1,29 @@
 function download() {
-const url = document.getElementById('url').value.trim();
-const type = document.getElementById('type').value;
-const quality = document.getElementById('quality').value;
-const status = document.getElementById('status');
+  const url = document.getElementById("url").value;
+  const status = document.getElementById("status");
 
+  if (!url) {
+    status.innerText = "Cole um link válido";
+    return;
+  }
 
-if (!url) {
-status.textContent = 'Cole um link válido.';
-return;
-}
+  status.innerText = "Baixando...";
 
-
-// FRONTEND apenas envia para o backend
-const api = 'https://SEU-BACKEND/download';
-
-
-status.textContent = 'Preparando download...';
-
-
-fetch(api, {
-method: 'POST',
-headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify({ url, type, quality })
-})
-.then(r => r.json())
-.then(d => {
-if (d.error) status.textContent = d.error;
-else window.location.href = d.downloadUrl;
-})
-.catch(() => status.textContent = 'Erro ao conectar ao servidor');
+  fetch("https://SEU-BACKEND.onrender.com/download", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ url })
+  })
+  .then(res => {
+    if (!res.ok) throw new Error();
+    return res.blob();
+  })
+  .then(blob => {
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "arquivo";
+    a.click();
+    status.innerText = "Download concluído";
+  })
+  .catch(() => status.innerText = "Erro ao baixar");
 }
