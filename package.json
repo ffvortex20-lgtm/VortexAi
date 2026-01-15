@@ -1,9 +1,8 @@
 {
-  "name": "simple-downloader",
-  "type": "module",
-  "dependencies": {
-    "express": "^4.18.2",
-    "cors": "^2.8.5",
-    "node-fetch": "^3.3.2"
-  }
+"name": "vortex-downloader",
+"type": "module",
+"dependencies": {
+"cors": "^2.8.5",
+"express": "^4.18.2"
+}
 }
