@@ -1,15 +1,43 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>Link Resolver</title>
-<link rel="stylesheet" href="style.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Vortex Downloader</title>
+<link rel="stylesheet" href="style.css" />
 </head>
 <body>
-<h1>🔗 Resolver Encurtador</h1>
-<input id="url" placeholder="Cole o link encurtado" />
-<button onclick="resolver()">Resolver</button>
-<p id="result"></p>
+<div class="container">
+<h1>⬇️ Vortex Downloader</h1>
+<p>Baixe vídeos ou músicas de conteúdos permitidos</p>
+
+
+<input id="url" placeholder="Cole o link aqui" />
+
+
+<div class="options">
+<select id="type">
+<option value="video">Vídeo</option>
+<option value="audio">Áudio</option>
+</select>
+
+
+<select id="quality">
+<option value="best">Melhor</option>
+<option value="2160p">4K (se disponível)</option>
+<option value="1080p">1080p</option>
+<option value="720p">720p</option>
+</select>
+</div>
+
+
+<button onclick="download()">Baixar</button>
+
+
+<div id="status"></div>
+</div>
+
+
 <script src="app.js"></script>
 </body>
 </html>
