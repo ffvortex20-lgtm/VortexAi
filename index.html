@@ -12,91 +12,124 @@
 <style>
 *{box-sizing:border-box}
 body{
-  background:#0b0e14;
-  color:white;
-  font-family:'Segoe UI',sans-serif;
   margin:0;
+  font-family:'Segoe UI',sans-serif;
+  background:radial-gradient(circle at top,#1f6feb22,#0b0e14 60%);
+  color:white;
 }
 
-/* ===== TOPO ESTILO GEMINI ===== */
+/* ===== TOPBAR ===== */
 .topbar{
   position:fixed;
   top:0;
-  left:0;
   width:100%;
   height:60px;
-  background:#0d1117;
+  background:#0d1117cc;
+  backdrop-filter:blur(8px);
   border-bottom:1px solid #30363d;
   display:flex;
   justify-content:space-between;
   align-items:center;
   padding:0 20px;
-  z-index:100;
+  z-index:10;
 }
-
-.user-info{
+.user{
   display:flex;
   align-items:center;
   gap:10px;
 }
-
-.user-info img{
+.user img{
   width:36px;
   height:36px;
   border-radius:50%;
-  border:1px solid #30363d;
   display:none;
+  border:1px solid #30363d;
 }
-
-.user-info span{
-  color:#58a6ff;
-  font-size:14px;
-}
+.user span{color:#58a6ff;font-size:14px}
 
 .topbar button{
-  padding:8px 14px;
-  border-radius:6px;
+  padding:8px 16px;
+  border-radius:8px;
   border:none;
+  font-weight:600;
+  cursor:pointer;
+}
+#loginBtn{background:#1f6feb;color:white}
+#logoutBtn{background:#da3633;color:white;display:none}
+
+/* ===== HERO LOGIN ===== */
+.hero{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding-top:60px;
+}
+.login-card{
+  background:#161b22;
+  border:1px solid #30363d;
+  border-radius:16px;
+  padding:40px;
+  width:360px;
+  text-align:center;
+  animation:fade 0.8s ease;
+}
+.login-card h1{
+  margin:0 0 10px;
+  color:#58a6ff;
+}
+.login-card p{
+  color:#8b949e;
+  font-size:14px;
+}
+.google-btn{
+  margin-top:25px;
+  width:100%;
+  padding:14px;
+  border-radius:10px;
+  border:none;
+  background:white;
+  color:#111;
   font-weight:bold;
   cursor:pointer;
 }
+.google-btn:hover{background:#eee}
 
-#loginBtn{background:#238636;color:white}
-#logoutBtn{background:#da3633;color:white;display:none}
-
-/* ===== CONTAINER ===== */
-.container{
-  background:#161b22;
-  padding:30px;
-  border-radius:12px;
-  border:1px solid #30363d;
-  width:450px;
-  margin:100px auto 40px;
-  display:none;
+@keyframes fade{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:none}
 }
 
+/* ===== PAINEL ===== */
+.container{
+  display:none;
+  background:#161b22;
+  border:1px solid #30363d;
+  border-radius:16px;
+  padding:30px;
+  width:450px;
+  margin:120px auto;
+}
 h2{text-align:center;color:#58a6ff}
 label{font-size:12px;color:#8b949e;margin-top:10px;display:block}
 input{
   width:100%;
   padding:12px;
   margin-top:5px;
-  border-radius:6px;
+  border-radius:8px;
   border:1px solid #30363d;
   background:#0d1117;
   color:white;
 }
-
 button.main{
   width:100%;
   padding:15px;
   margin-top:20px;
-  border-radius:6px;
+  border-radius:10px;
   border:none;
   background:#1f6feb;
   color:white;
   font-weight:bold;
-  cursor:pointer;
 }
 
 #resultado{
@@ -105,29 +138,28 @@ button.main{
   padding:15px;
   background:#0d1117;
   border:1px dashed #58a6ff;
-  border-radius:6px;
+  border-radius:10px;
 }
-
-#linkFinal{
-  color:#58a6ff;
-  font-size:13px;
-  word-break:break-all;
-  margin-bottom:10px;
-}
+#linkFinal{color:#58a6ff;font-size:13px;word-break:break-all}
 </style>
 </head>
 
 <body>
 
-<!-- ===== TOPO ===== -->
 <div class="topbar">
-  <div class="user-info">
+  <div class="user">
     <img id="userPhoto">
     <span id="welcome">Bem-vindo</span>
   </div>
-  <div>
-    <button id="loginBtn" onclick="loginGoogle()">Entrar com Google</button>
-    <button id="logoutBtn" onclick="logout()">Sair</button>
+  <button id="logoutBtn" onclick="logout()">Sair</button>
+</div>
+
+<!-- ===== LOGIN ===== -->
+<div class="hero" id="loginArea">
+  <div class="login-card">
+    <h1>Vortex Links</h1>
+    <p>Entre com Google para acessar o painel de geração</p>
+    <button class="google-btn" onclick="loginGoogle()">Entrar com Google</button>
   </div>
 </div>
 
@@ -135,22 +167,22 @@ button.main{
 <div class="container" id="painel">
 <h2>Gerar Link Único</h2>
 
-<label>Título da Versão</label>
-<input id="tit" placeholder="Ex: Delta V702">
+<label>Título</label>
+<input id="tit">
 
-<label>Nome do Arquivo</label>
-<input id="nom" placeholder="Ex: delta.apk">
+<label>Arquivo</label>
+<input id="nom">
 
 <label>Tamanho</label>
-<input id="tam" placeholder="Ex: 150 MB">
+<input id="tam">
 
-<label>Link de Download</label>
+<label>Link Download</label>
 <input id="l_d">
 
-<label>Link Botão Vermelho</label>
+<label>Link Botão</label>
 <input id="l_c">
 
-<label>Link ou ID do Vídeo</label>
+<label>Link Vídeo</label>
 <input id="l_v">
 
 <button class="main" onclick="gerarLinkCurto()">GERAR LINK</button>
@@ -158,12 +190,11 @@ button.main{
 <div id="resultado">
   <label>Link Final:</label>
   <div id="linkFinal"></div>
-  <button class="main" onclick="copiarLink()">COPIAR</button>
 </div>
 </div>
 
 <script>
-// ===== FIREBASE CONFIG (TROQUE ISSO) =====
+// ===== CONFIG FIREBASE (OBRIGATÓRIO) =====
 firebase.initializeApp({
   apiKey: "SUA_API_KEY",
   authDomain: "SEU_PROJETO.firebaseapp.com",
@@ -174,67 +205,34 @@ firebase.initializeApp({
 const auth = firebase.auth();
 const provider = new firebase.auth.GoogleAuthProvider();
 
-// LOGIN
+// LOGIN REDIRECT (mais compatível)
 function loginGoogle(){
-  auth.signInWithPopup(provider);
+  auth.signInWithRedirect(provider);
 }
 
-// LOGOUT
 function logout(){
   auth.signOut();
 }
 
-// CONTROLE LOGIN
+auth.getRedirectResult().catch(()=>{});
+
 auth.onAuthStateChanged(user=>{
-  const photo = document.getElementById("userPhoto");
-
   if(user){
-    document.getElementById("welcome").innerText =
-      "Bem-vindo, " + user.displayName;
+    welcome.innerText = "Bem-vindo, " + user.displayName;
+    userPhoto.src = user.photoURL;
+    userPhoto.style.display="block";
 
-    if(user.photoURL){
-      photo.src = user.photoURL;
-      photo.style.display="block";
-    }
-
-    loginBtn.style.display="none";
-    logoutBtn.style.display="inline-block";
+    loginArea.style.display="none";
     painel.style.display="block";
+    logoutBtn.style.display="inline-block";
   }else{
-    document.getElementById("welcome").innerText="Bem-vindo";
-    photo.style.display="none";
-
-    loginBtn.style.display="inline-block";
-    logoutBtn.style.display="none";
+    welcome.innerText="Bem-vindo";
+    loginArea.style.display="flex";
     painel.style.display="none";
+    logoutBtn.style.display="none";
+    userPhoto.style.display="none";
   }
 });
-
-// GERAR LINK
-async function gerarLinkCurto(){
-  let base = location.href.split('?')[0];
-  let link =
-    base.replace("index","concluir") +
-    `?t=${encodeURIComponent(tit.value)}`+
-    `&n=${encodeURIComponent(nom.value)}`+
-    `&s=${encodeURIComponent(tam.value)}`+
-    `&d=${encodeURIComponent(l_d.value)}`+
-    `&c=${encodeURIComponent(l_c.value)}`+
-    `&v=${encodeURIComponent(l_v.value)}`;
-
-  try{
-    const r = await fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(link)}`);
-    linkFinal.innerText = await r.text();
-  }catch{
-    linkFinal.innerText = link;
-  }
-  resultado.style.display="block";
-}
-
-function copiarLink(){
-  navigator.clipboard.writeText(linkFinal.innerText);
-  alert("Link copiado!");
-}
 </script>
 
 </body>
