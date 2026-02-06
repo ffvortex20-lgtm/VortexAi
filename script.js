@@ -1,4 +1,5 @@
 // ===== RELÓGIO =====
+}
 
 
 // ===== CONTADOR DE TEXTO =====
