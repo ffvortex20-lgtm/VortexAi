@@ -1,16 +1,14 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VORTEX SubMais</title>
-<link rel="stylesheet" href="style.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-</head>
-<body>
+</div>
+
+
+<!-- SITE PRINCIPAL (ESCONDIDO ATÉ LOGAR) -->
+<div id="app" class="hidden">
 <header class="topbar">
 <h1>VORTEX <span>SubMais</span></h1>
 <div id="liveClock"></div>
+<div id="roleTag"></div>
+<button class="small" onclick="logout()">Sair</button>
 </header>
 
 
@@ -58,12 +56,22 @@
 <button onclick="checkLink()">Testar Link</button>
 <p id="checkResult"></p>
 </section>
+
+
+<!-- ÁREA EXCLUSIVA DO DONO -->
+<section id="adminPanel" class="card hidden">
+<h2>👑 Painel do Dono (VORTEX / 44)</h2>
+<p>Links gerados na sessão atual:</p>
+<div id="adminLiveLinks"></div>
+<button onclick="exportHistory()" class="small">Exportar Histórico (TXT)</button>
+</section>
 </main>
 
 
 <footer>
-VORTEX SubMais • Funciona no GitHub Pages • Usa TinyURL API
+VORTEX SubMais • GitHub Pages • TinyURL API
 </footer>
+</div>
 
 
 <script src="script.js"></script>
