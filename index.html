@@ -1,69 +1,69 @@
 <!DOCTYPE html>
-<title>Web Control Center</title>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VORTEX SubMais</title>
 <link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
+<header class="topbar">
+<h1>VORTEX <span>SubMais</span></h1>
+<div id="liveClock"></div>
+</header>
 
 
-<div class="hud">
-<div>Status: <span id="status">ONLINE</span></div>
-<div id="clock"></div>
-<div>Modo Criador: ATIVO</div>
+<main class="container">
+<section class="card glow">
+<h2>Encurtador de Links</h2>
+<input id="longUrl" placeholder="Cole seu link aqui (https://...)" />
+<div class="row">
+<button onclick="shortenUrl()">Encurtar</button>
+<button onclick="clearInput()" class="secondary">Limpar</button>
 </div>
 
 
-<h1 class="title">WEB CONTROL CENTER</h1>
-
-
-<div class="grid">
-
-
-<div class="card">
-<h2>Gerador de Senha</h2>
-<input type="number" id="passSize" value="12" min="6" max="30">
-<button onclick="generatePassword()">Gerar</button>
-<p id="password"></p>
-<button onclick="copyPassword()">Copiar Senha</button>
+<div id="resultBox" class="hidden">
+<p>Link encurtado:</p>
+<div class="copy-row">
+<input id="shortUrl" readonly />
+<button onclick="copyShort()">Copiar</button>
 </div>
-
-
-<div class="card">
-<h2>Contador de Texto</h2>
-<textarea id="textArea" placeholder="Cole seu texto aqui..." oninput="countText()"></textarea>
-<p id="countResult"></p>
+<div id="qrcode"></div>
+<button onclick="downloadQR()" class="small">Baixar QR</button>
 </div>
+</section>
 
 
+<section class="grid">
 <div class="card">
-<h2>Criar Mini Logo</h2>
-<input id="logoInput" placeholder="Digite um nome">
-<button onclick="makeLogo()">Criar</button>
-<canvas id="logoCanvas" width="300" height="120"></canvas>
-<button onclick="downloadLogo()">Baixar Logo</button>
+<h3>📊 Estatísticas</h3>
+<p>Total encurtados: <b id="totalCount">0</b></p>
+<p>Último link: <span id="lastLink">—</span></p>
 </div>
 
 
 <div class="card">
-<h2>Cofre</h2>
-<button onclick="toggleVault()">ABRIR COFRE</button>
-<div id="vault" class="vault hidden">
-<div>📁 Projetos</div>
-<div>📁 Scripts</div>
-<div>📁 Ideias</div>
-<div>📁 GitHub</div>
+<h3>🕒 Histórico (local)</h3>
+<div id="history"></div>
+<button onclick="clearHistory()" class="small">Limpar Histórico</button>
 </div>
-</div>
+</section>
 
 
-</div>
+<section class="card">
+<h3>🔍 Verificador de Link</h3>
+<input id="checkUrl" placeholder="Cole um link para testar" />
+<button onclick="checkLink()">Testar Link</button>
+<p id="checkResult"></p>
+</section>
+</main>
 
 
-<div class="assistant-box">
-<h2>Mini Assistente</h2>
-<input id="askInput" placeholder="Ex: dê um nome mau">
-<button onclick="askAssistant()">Perguntar</button>
-<p id="assistantReply"></p>
-</div>
+<footer>
+VORTEX SubMais • Funciona no GitHub Pages • Usa TinyURL API
+</footer>
 
 
 <script src="script.js"></script>
