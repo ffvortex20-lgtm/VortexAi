@@ -1,4 +1,4 @@
-*{box-sizing:border-box;}
+0px;
 margin:20px auto;
 padding:0 10px;
 }
@@ -55,7 +55,7 @@ gap:15px;
 }
 
 
-#history div{
+#history div, #adminLiveLinks div{
 background:#0b0b14;
 padding:6px;
 border-radius:6px;
@@ -66,6 +66,9 @@ word-break:break-all;
 
 
 .hidden{display:none;}
+
+
+#roleTag{color:#b45bff;font-weight:bold;}
 
 
 footer{
