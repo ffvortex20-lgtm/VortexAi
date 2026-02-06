@@ -1,79 +1,83 @@
-0px;
-margin:20px auto;
-padding:0 10px;
+// ===== LOGIN (100% CLIENT-SIDE FUNCIONAL) =====
 }
 
 
-.card{
-background:#111;
-border:1px solid #b45bff;
-border-radius:14px;
-padding:15px;
-margin-bottom:15px;
+function exportHistory(){
+const hist = JSON.parse(localStorage.getItem("vortex_history") || "[]");
+let txt = hist.map(h => `${h.date}
+${h.long} -> ${h.short}
+`).join("
+");
+const blob = new Blob([txt], {type:"text/plain"});
+const a = document.createElement("a");
+a.href = URL.createObjectURL(blob);
+a.download = "vortex-historico.txt";
+a.click();
 }
 
 
-.glow{box-shadow:0 0 12px rgba(180,91,255,.4);}
-
-
-h2,h3{color:#b45bff;}
-
-
-input{
-width:100%;
-padding:10px;
-margin:8px 0;
-border-radius:8px;
-border:none;
+// ===== QR CODE =====
+function makeQR(url){
+const box = document.getElementById("qrcode");
+box.innerHTML = "";
+new QRCode(box, {text:url, width:160, height:160, colorDark:"#b45bff", colorLight:"#0b0b14"});
 }
 
 
-.row{display:flex;gap:10px;flex-wrap:wrap;}
-.copy-row{display:flex;gap:8px;}
-
-
-button{
-background:#b45bff;
-border:none;
-padding:8px 12px;
-color:white;
-cursor:pointer;
-border-radius:8px;
-}
-button.secondary{background:#222; border:1px solid #b45bff;}
-button.small{padding:6px 8px; font-size:12px;}
-button:hover{box-shadow:0 0 10px #b45bff;}
-
-
-#qrcode{margin:10px 0;}
-
-
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:15px;
+function downloadQR(){
+const canvas = document.querySelector("#qrcode canvas");
+if(!canvas){alert("Gere um link primeiro!"); return;}
+const a = document.createElement("a");
+a.download = "vortex-qr.png";
+a.href = canvas.toDataURL("image/png");
+a.click();
 }
 
 
-#history div, #adminLiveLinks div{
-background:#0b0b14;
-padding:6px;
-border-radius:6px;
-margin:4px 0;
-font-size:12px;
-word-break:break-all;
+// ===== ENCURTAR (TinyURL API) =====
+async function shortenUrl(){
+const long = document.getElementById("longUrl").value.trim();
+if(!long.startsWith("http")){
+alert("Cole um link válido começando com http:// ou https://"); return;
+}
+try{
+const api = `https://tinyurl.com/api-create.php?url=${encodeURIComponent(long)}`;
+const res = await fetch(api);
+const short = await res.text();
+document.getElementById("shortUrl").value = short;
+document.getElementById("resultBox").classList.remove("hidden");
+makeQR(short);
+saveToHistory(long, short);
+}catch(e){alert("Erro ao encurtar. Tente novamente.");}
 }
 
 
-.hidden{display:none;}
-
-
-#roleTag{color:#b45bff;font-weight:bold;}
-
-
-footer{
-text-align:center;
-font-size:12px;
-opacity:.7;
-margin:20px;
+function copyShort(){
+const v = document.getElementById("shortUrl").value;
+navigator.clipboard.writeText(v);
+alert("Copiado!");
 }
+
+
+// ===== VERIFICADOR DE LINK =====
+async function checkLink(){
+const url = document.getElementById("checkUrl").value.trim();
+const out = document.getElementById("checkResult");
+if(!url){ out.innerText = "Cole um link."; return; }
+try{
+await fetch(url, {mode:"no-cors"});
+out.innerText = "✅ O link parece ativo.";
+}catch(e){ out.innerText = "❌ O link pode estar quebrado."; }
+}
+
+
+// INIT (se já estiver logado)
+const saved = localStorage.getItem("vortex_role");
+if(saved){
+document.getElementById("loginScreen").classList.add("hidden");
+document.getElementById("app").classList.remove("hidden");
+document.getElementById("roleTag").innerText = saved === "ADMIN" ? "👑 DONO" : "👥 CLIENTE";
+if(saved === "ADMIN") document.getElementById("adminPanel").classList.remove("hidden");
+}
+renderHistory();
+updateStats();
