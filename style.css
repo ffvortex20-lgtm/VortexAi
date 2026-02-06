@@ -1,0 +1,74 @@
+body{
+background:#0b0b14;
+color:white;
+font-family:Arial, sans-serif;
+text-align:center;
+}
+
+.title{
+color:#b45bff;
+text-shadow:0 0 10px #b45bff;
+}
+
+.hud{
+display:flex;
+justify-content:space-around;
+background:#111;
+padding:10px;
+border-bottom:1px solid #b45bff;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:15px;
+padding:20px;
+}
+
+.card{
+background:#111;
+padding:15px;
+border-radius:12px;
+border:1px solid #b45bff;
+}
+
+textarea,input{
+width:90%;
+padding:8px;
+margin:5px 0;
+}
+
+button{
+background:#b45bff;
+border:none;
+padding:8px 12px;
+color:white;
+cursor:pointer;
+border-radius:8px;
+}
+
+button:hover{box-shadow:0 0 10px #b45bff;}
+
+.logo{
+margin-top:10px;
+font-size:24px;
+color:#b45bff;
+text-shadow:0 0 8px #b45bff;
+}
+
+.vault{
+margin-top:10px;
+background:#0b0b14;
+padding:10px;
+border-radius:8px;
+}
+
+.hidden{display:none;}
+
+.assistant-box{
+margin:20px;
+padding:15px;
+background:#111;
+border:1px solid #b45bff;
+border-radius:12px;
+}
