@@ -8,55 +8,67 @@
 </head>
 <body>
 
+
 <div class="hud">
-  <div>Status: <span id="status">ONLINE</span></div>
-  <div id="clock"></div>
-  <div>Modo Criador: ATIVO</div>
+<div>Status: <span id="status">ONLINE</span></div>
+<div id="clock"></div>
+<div>Modo Criador: ATIVO</div>
 </div>
+
 
 <h1 class="title">WEB CONTROL CENTER</h1>
 
+
 <div class="grid">
 
-  <div class="card">
-    <h2>Gerador de Senha</h2>
-    <input type="number" id="passSize" value="12" min="6" max="30">
-    <button onclick="generatePassword()">Gerar</button>
-    <p id="password"></p>
-  </div>
 
-  <div class="card">
-    <h2>Contador de Texto</h2>
-    <textarea id="textArea" placeholder="Cole seu texto aqui..." oninput="countText()"></textarea>
-    <p id="countResult"></p>
-  </div>
+<div class="card">
+<h2>Gerador de Senha</h2>
+<input type="number" id="passSize" value="12" min="6" max="30">
+<button onclick="generatePassword()">Gerar</button>
+<p id="password"></p>
+<button onclick="copyPassword()">Copiar Senha</button>
+</div>
 
-  <div class="card">
-    <h2>Criar Mini Logo</h2>
-    <input id="logoInput" placeholder="Digite um nome">
-    <button onclick="makeLogo()">Criar</button>
-    <div id="logoPreview" class="logo"></div>
-  </div>
 
-  <div class="card">
-    <h2>Cofre</h2>
-    <button onclick="toggleVault()">ABRIR COFRE</button>
-    <div id="vault" class="vault hidden">
-      <div>📁 Projetos</div>
-      <div>📁 Scripts</div>
-      <div>📁 Ideias</div>
-      <div>📁 GitHub</div>
-    </div>
-  </div>
+<div class="card">
+<h2>Contador de Texto</h2>
+<textarea id="textArea" placeholder="Cole seu texto aqui..." oninput="countText()"></textarea>
+<p id="countResult"></p>
+</div>
+
+
+<div class="card">
+<h2>Criar Mini Logo</h2>
+<input id="logoInput" placeholder="Digite um nome">
+<button onclick="makeLogo()">Criar</button>
+<canvas id="logoCanvas" width="300" height="120"></canvas>
+<button onclick="downloadLogo()">Baixar Logo</button>
+</div>
+
+
+<div class="card">
+<h2>Cofre</h2>
+<button onclick="toggleVault()">ABRIR COFRE</button>
+<div id="vault" class="vault hidden">
+<div>📁 Projetos</div>
+<div>📁 Scripts</div>
+<div>📁 Ideias</div>
+<div>📁 GitHub</div>
+</div>
+</div>
+
 
 </div>
+
 
 <div class="assistant-box">
-  <h2>Mini Assistente</h2>
-  <input id="askInput" placeholder="Ex: dê um nome mau">
-  <button onclick="askAssistant()">Perguntar</button>
-  <p id="assistantReply"></p>
+<h2>Mini Assistente</h2>
+<input id="askInput" placeholder="Ex: dê um nome mau">
+<button onclick="askAssistant()">Perguntar</button>
+<p id="assistantReply"></p>
 </div>
+
 
 <script src="script.js"></script>
 </body>
